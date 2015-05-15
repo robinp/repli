@@ -62,6 +62,7 @@ runSingle expr =
             ]
           , Mu.loadFile = "/tmp/Imports.hs"
           , Mu.expression = T.unpack expr
+          , Mu.modules = Nothing
           }
   where
     go opt = do
