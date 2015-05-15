@@ -1,0 +1,3 @@
+[submodule "mueval"]
+	path = mueval
+	url = https://github.com/gwern/mueval
