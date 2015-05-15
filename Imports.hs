@@ -16,6 +16,8 @@ import qualified Data.Aeson as A
 import           Data.Array
 import           Data.Bits
 import           Data.Bool
+import qualified Data.ByteString as B
+import qualified Data.ByteString.Lazy as BL
 import           Data.Char
 import           Data.Complex
 import           Data.Dynamic
@@ -34,8 +36,11 @@ import           Data.Monoid
 import           Data.Ord
 import           Data.Ratio
 import qualified Data.Set as S
+import           Data.Text (Text)
 import qualified Data.Text as T
+import qualified Data.Text.Encoding as T
 import qualified Data.Text.Lazy as TL
+import qualified Data.Text.Lazy.Encoding as TL
 import           Data.Tree
 import           Data.Tuple
 import           Data.Typeable
@@ -46,3 +51,9 @@ import           Safe hiding (abort)
 import           ShowFun
 import           System.Random
 import           Text.Printf
+
+-- Convenience for golfing.
+asS :: (String -> String) -> Text -> Text
+asS f = T.pack . f . T.unpack
+
+asS' = flip asS
