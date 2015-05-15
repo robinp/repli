@@ -23,6 +23,7 @@ executable repli
                        base >=4.7 && <4.8,
                        bytestring,
                        ekg,
+                       ekg-core,
                        hint,
                        mueval,
                        scotty,

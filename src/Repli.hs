@@ -6,6 +6,7 @@ module Repli
 
 import Control.Concurrent (threadDelay)
 import qualified Control.Concurrent.Async as Async
+import Control.Exception (evaluate)
 import Control.Monad (join)
 import Data.Aeson (ToJSON(..), (.=), object)
 import Data.Text (Text)
@@ -14,9 +15,6 @@ import qualified Mueval.ArgsParse as Mu
 import qualified Mueval.Interpreter as Mu
 import qualified Language.Haskell.Interpreter as Hint
 import System.Posix.Signals (sigXCPU, installHandler, Handler(CatchOnce))
-
-import Debug.Trace
-import Control.Exception
 
 data Err
     = OptionError String
@@ -72,6 +70,7 @@ runSingle expr =
             (d "timeout" timeout)
             (d "runI" $ (fmap wrapRes $ Hint.runInterpreter i) >>= evaluate)
       where
+        d _ = id
         t = T.pack
         timeout = threadDelay (10*1000000) >> return TimeoutError
         wrapRes (Left err) = Left . InterpreterError $ err
