@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
+import Control.Concurrent (newMVar, withMVar)
 import Control.Monad (unless)
 import Control.Monad.IO.Class (liftIO)
 import qualified Data.ByteString.Lazy as BL
@@ -24,8 +25,9 @@ serve port estore = do
     ekgFail <- M.createCounter "repli.eval.fails" estore
     ekgCompTime <- M.createDistribution "repli.eval.comp_time_us" estore
     ekgLastExpr <- M.createLabel "repli.eval.last_expr" estore
+    replLock <- newMVar ()  -- ugly global lock, since GHC API needs it.
     let doEval expr = do
-          res <- liftIO $ timed ekgCompTime $ do
+          res <- liftIO . withMVar replLock . const . timed ekgCompTime $ do
               Label.set ekgLastExpr expr
               runSingle expr
           case res of
